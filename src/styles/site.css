@@ -1,0 +1,118 @@
+/* @umituz/web-landing — public site shell stylesheet (ul-* prefix).
+ *
+ * Structural styling only: layout, spacing and skip-link mechanics.
+ * Colors/radii come from @umituz/web-design-system semantic variables
+ * (--color-*); apps layer their own skin over the ul-site-* classes.
+ * Import AFTER the design-system stylesheet. */
+
+.ul-site {
+  --ul-space-1: 4px;
+  --ul-space-2: 8px;
+  --ul-space-3: 12px;
+  --ul-space-6: 24px;
+  --ul-space-8: 32px;
+  --ul-space-10: 40px;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* — Skip link: first focusable element, visible only when focused — */
+.ul-skip-link {
+  position: fixed;
+  top: var(--ul-space-2);
+  left: var(--ul-space-2);
+  z-index: 100;
+  transform: translateY(-200%);
+  padding: var(--ul-space-2) var(--ul-space-6);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.1s ease;
+}
+.ul-skip-link:focus {
+  transform: translateY(0);
+}
+
+/* — Header — */
+.ul-site-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ul-space-6);
+  padding: var(--ul-space-3) var(--ul-space-6);
+}
+.ul-site-brand {
+  display: flex;
+  align-items: center;
+}
+.ul-site-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--ul-space-1);
+  flex: 1;
+}
+.ul-site-link {
+  padding: var(--ul-space-2) var(--ul-space-3);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--color-muted-foreground);
+}
+.ul-site-link:hover,
+.ul-site-link--active {
+  color: var(--color-foreground);
+}
+.ul-site-cta {
+  display: flex;
+  align-items: center;
+  gap: var(--ul-space-2);
+}
+
+/* — Main — */
+.ul-site-main {
+  flex: 1;
+}
+
+/* — Footer — */
+.ul-site-footer {
+  padding: var(--ul-space-10) var(--ul-space-6) var(--ul-space-6);
+}
+.ul-site-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--ul-space-8);
+}
+.ul-site-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ul-space-3);
+}
+.ul-site-note {
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground);
+  max-width: 32ch;
+}
+.ul-site-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ul-space-2);
+}
+.ul-site-col h4 {
+  margin: 0 0 var(--ul-space-2);
+  font-size: 0.875rem;
+}
+.ul-site-col a {
+  text-decoration: none;
+  color: var(--color-muted-foreground);
+}
+.ul-site-col a:hover {
+  color: var(--color-foreground);
+}
+.ul-site-legal {
+  margin: var(--ul-space-8) 0 0;
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground);
+}

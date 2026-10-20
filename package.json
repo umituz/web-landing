@@ -1,0 +1,77 @@
+{
+  "name": "@umituz/web-landing",
+  "version": "1.0.0",
+  "description": "Public marketing-site shell for the fleet — PublicSiteLayout (header nav, CTA pair, footer columns, skip link, scroll restore); ul-* stylesheet on design-system tokens. The public twin of @umituz/web-dashboard.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./layouts": "./src/layouts/index.ts",
+    "./layouts/components": "./src/layouts/components/index.ts",
+    "./layouts/types": "./src/layouts/types/index.ts",
+    "./site.css": "./src/styles/site.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "version:patch": "npm version patch -m 'chore: release v%s'",
+    "version:minor": "npm version minor -m 'chore: release v%s'",
+    "version:major": "npm version major -m 'chore: release v%s'"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "react-router-dom": "^6.0.0 || ^7.0.0"
+  },
+  "dependencies": {
+    "@umituz/web-design-system": "^4.20.0",
+    "@umituz/web-localization": "^1.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.57.2",
+    "@typescript-eslint/parser": "^8.57.2",
+    "eslint": "^10.0.2",
+    "react-router-dom": "^7.13.1",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.1",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "jsdom": "^29.1.1"
+  },
+  "keywords": [
+    "landing",
+    "marketing-site",
+    "public-shell",
+    "layout",
+    "react",
+    "typescript",
+    "package-driven"
+  ],
+  "author": "umituz",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/umituz/web-landing.git"
+  },
+  "bugs": {
+    "url": "https://github.com/umituz/web-landing/issues"
+  },
+  "homepage": "https://github.com/umituz/web-landing#readme"
+}
