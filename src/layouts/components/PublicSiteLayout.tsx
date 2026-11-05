@@ -9,14 +9,10 @@ export interface PublicSiteLayoutProps {
   children: ReactNode;
 }
 
-/** Marketing-site shell — the public twin of the dashboard layout: skip
- *  link, header nav with active state, CTA pair, footer columns, scroll
- *  restore. Structure only; apps skin it through the ul-site-* classes. */
 export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) => {
   const location = useLocation();
   const t = useT();
 
-  // Scroll-restore on navigation — owned here so every app doesn't redo it.
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [location.pathname]);

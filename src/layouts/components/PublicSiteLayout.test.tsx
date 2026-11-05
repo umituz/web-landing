@@ -40,7 +40,6 @@ describe('PublicSiteLayout', () => {
 
   it('marks the active nav route and leaves others plain', () => {
     renderAt('/pricing');
-    // NavLink sets aria-current="page" on the active link
     const active = screen.getByRole('link', { name: 'Pricing', current: 'page' }) as HTMLElement;
     expect(active.className).toContain('ul-site-link--active');
     const idle = screen.getAllByRole('link', { name: 'Features' }).find((el) => el.className.includes('ul-site-link')) as HTMLElement;
