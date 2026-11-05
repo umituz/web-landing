@@ -1,6 +1,6 @@
 {
   "name": "@umituz/web-landing",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Public marketing-site shell for the fleet — PublicSiteLayout (header nav, CTA pair, footer columns, skip link, scroll restore); ul-* stylesheet on design-system tokens. The public twin of @umituz/web-dashboard.",
   "type": "module",
   "main": "./src/index.ts",
