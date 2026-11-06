@@ -40,10 +40,30 @@ describe('PublicSiteLayout', () => {
 
   it('marks the active nav route and leaves others plain', () => {
     renderAt('/pricing');
-    const active = screen.getByRole('link', { name: 'Pricing', current: 'page' }) as HTMLElement;
+    const activePricing = screen.getAllByRole('link', { name: 'Pricing', current: 'page' });
+    const active = activePricing.find((el) => el.className.includes('ul-site-link')) as HTMLElement;
     expect(active.className).toContain('ul-site-link--active');
     const idle = screen.getAllByRole('link', { name: 'Features' }).find((el) => el.className.includes('ul-site-link')) as HTMLElement;
     expect(idle.className).not.toContain('ul-site-link--active');
+  });
+
+  it('renders user dropdown and app button when user is logged in', () => {
+    const loggedInConfig: PublicLayoutConfig = {
+      ...config,
+      user: { name: 'Alice Smith', email: 'alice@example.com' },
+      authCta: {
+        app: { to: '/app', label: 'Go to App' },
+      },
+    };
+    render(
+      <MemoryRouter initialEntries={['/features']}>
+        <Routes>
+          <Route path="*" element={<PublicSiteLayout config={loggedInConfig}>page-content</PublicSiteLayout>} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    expect(screen.getByRole('link', { name: 'Go to App' })).toBeTruthy();
+    expect(screen.getByText('Alice Smith')).toBeTruthy();
   });
 
   it('renders CTA buttons, footer columns and the legal line', () => {
