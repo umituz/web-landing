@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router';
 import { Button } from '@umituz/web-design-system/atoms';
 import { Check, ChevronDown, Globe, LogOut } from 'lucide-react';
 import type {
