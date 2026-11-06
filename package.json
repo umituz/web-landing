@@ -36,7 +36,6 @@
     "react-router-dom": "^6.0.0 || ^7.0.0"
   },
   "dependencies": {
-    "@umituz/web-localization": "^1.2.1",
     "lucide-react": "^1.69.0"
   },
   "devDependencies": {

@@ -1,32 +1,56 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { useT } from '@umituz/web-localization/react';
 import { Button } from '@umituz/web-design-system/atoms';
-import { ChevronDown, LogOut } from 'lucide-react';
-import type { PublicLayoutConfig, PublicUser, PublicUserNavAction } from '../types/layout';
+import { Check, ChevronDown, Globe, LogOut } from 'lucide-react';
+import type {
+  PublicBrand,
+  PublicLanguageSelector,
+  PublicLayoutConfig,
+  PublicUser,
+  PublicUserNavAction,
+} from '../types/layout';
 
 export interface PublicSiteLayoutProps {
   config: PublicLayoutConfig;
   children?: ReactNode;
 }
 
-function UserMenuDropdown({
-  user,
-  onLogout,
-  actions,
-}: {
-  user: PublicUser;
-  onLogout?: () => void | Promise<void>;
-  actions?: PublicUserNavAction[];
-}) {
-  const t = useT();
-  const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+function isBrandData(value: ReactNode | PublicBrand): value is PublicBrand {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'mark' in value &&
+    'name' in value &&
+    !('$$typeof' in value)
+  );
+}
 
+function BrandWordmark({ brand, variant }: { brand: PublicBrand; variant: 'header' | 'footer' }) {
+  const footer = variant === 'footer';
+  return (
+    <Link to={brand.to ?? '/'} className={`ul-site-brand-link${footer ? ' ul-site-brand-link--footer' : ''}`}>
+      <span className={`ul-site-brand-mark${footer ? ' ul-site-brand-mark--footer' : ''}`} aria-hidden="true">
+        {brand.mark}
+      </span>
+      <span className="ul-site-brand-text">
+        <span className="ul-site-brand-name">{brand.name}</span>
+        {brand.tagline && !footer && <span className="ul-site-brand-tagline">{brand.tagline}</span>}
+      </span>
+    </Link>
+  );
+}
+
+function BrandSlot({ value, variant }: { value: ReactNode | PublicBrand; variant: 'header' | 'footer' }) {
+  if (isBrandData(value)) return <BrandWordmark brand={value} variant={variant} />;
+  return <>{value}</>;
+}
+
+function useDismissOnOutsideClick<T extends HTMLElement>(isOpen: boolean, onClose: () => void) {
+  const ref = useRef<T>(null);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        onClose();
       }
     }
     if (isOpen) {
@@ -35,9 +59,80 @@ function UserMenuDropdown({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
+  return ref;
+}
 
-  const displayName = user.name || user.email?.split('@')[0] || t('Profile');
+function LanguageMenu({ selector }: { selector: PublicLanguageSelector }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useDismissOnOutsideClick<HTMLDivElement>(isOpen, () => setIsOpen(false));
+  const active = selector.languages.find((language) => language.id === selector.activeId);
+
+  return (
+    <div className="ul-site-lang" ref={menuRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        aria-label={selector.label}
+        className="ul-site-lang-btn"
+      >
+        <Globe size={13} aria-hidden="true" />
+        {active?.flag && (
+          <span aria-hidden="true">{active.flag}</span>
+        )}
+        <span>{active?.label}</span>
+        <ChevronDown size={13} className={`ul-site-chevron ${isOpen ? 'ul-site-chevron--open' : ''}`} aria-hidden="true" />
+      </button>
+
+      {isOpen && (
+        <div role="listbox" aria-label={selector.label} className="ul-site-lang-menu">
+          {selector.languages.map((language) => {
+            const isActive = language.id === selector.activeId;
+            return (
+              <button
+                key={language.id}
+                type="button"
+                role="option"
+                aria-selected={isActive}
+                onClick={() => {
+                  setIsOpen(false);
+                  selector.onSelect(language.id);
+                }}
+                className={`ul-site-lang-option${isActive ? ' ul-site-lang-option--active' : ''}`}
+              >
+                <span className="ul-site-lang-option-label">
+                  {language.flag && <span aria-hidden="true">{language.flag}</span>}
+                  {language.label}
+                </span>
+                {isActive && <Check size={14} className="ul-site-lang-check" aria-hidden="true" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function UserMenuDropdown({
+  user,
+  onLogout,
+  actions,
+  signOutLabel,
+  profileLabel,
+}: {
+  user: PublicUser;
+  onLogout?: () => void | Promise<void>;
+  actions?: PublicUserNavAction[];
+  signOutLabel?: string;
+  profileLabel?: string;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useDismissOnOutsideClick<HTMLDivElement>(isOpen, () => setIsOpen(false));
+
+  const displayName = user.name || user.email?.split('@')[0] || profileLabel || 'Profile';
   const initial = displayName.charAt(0).toUpperCase();
 
   return (
@@ -116,7 +211,7 @@ function UserMenuDropdown({
                 className="ul-site-dropdown-item ul-site-dropdown-item--danger"
               >
                 <LogOut size={14} aria-hidden="true" />
-                <span>{t('Sign out')}</span>
+                <span>{signOutLabel ?? 'Sign out'}</span>
               </button>
             </div>
           )}
@@ -128,7 +223,6 @@ function UserMenuDropdown({
 
 export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) => {
   const location = useLocation();
-  const t = useT();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -140,14 +234,18 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
   return (
     <div className="ul-site">
       <a href={`#${mainId}`} className="ul-skip-link">
-        {config.skipLabel ?? t('Skip to content')}
+        {config.skipLabel ?? 'Skip to content'}
       </a>
 
       <header className="ul-site-header">
         <div className="ul-site-header-inner">
-          {config.brand && <div className="ul-site-brand">{config.brand}</div>}
+          {config.brand && (
+            <div className="ul-site-brand">
+              <BrandSlot value={config.brand} variant="header" />
+            </div>
+          )}
 
-          <nav className="ul-site-nav" aria-label={config.navLabel ?? t('Site')}>
+          <nav className="ul-site-nav" aria-label={config.navLabel ?? 'Site'}>
             {config.navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -161,6 +259,7 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
           </nav>
 
           <div className="ul-site-actions">
+            {config.languageSelector && <LanguageMenu selector={config.languageSelector} />}
             {config.headerActions}
 
             {config.user ? (
@@ -179,6 +278,8 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
                   user={config.user}
                   onLogout={config.onLogout}
                   actions={config.userMenuActions}
+                  signOutLabel={config.signOutLabel}
+                  profileLabel={config.profileLabel}
                 />
               </div>
             ) : (
@@ -208,7 +309,7 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
         </div>
 
         {mobileNav.length > 0 && (
-          <nav className="ul-site-mobile-nav" aria-label={config.navLabel ?? t('Site')}>
+          <nav className="ul-site-mobile-nav" aria-label={config.navLabel ?? 'Site'}>
             {mobileNav.map((item) => (
               <NavLink
                 key={item.to}
@@ -231,7 +332,7 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
           <div className="ul-site-footer-grid">
             {(config.footerBrand || config.footerNote) && (
               <div className="ul-site-footer-brand">
-                {config.footerBrand}
+                {config.footerBrand && <BrandSlot value={config.footerBrand} variant="footer" />}
                 {config.footerNote && <div className="ul-site-note">{config.footerNote}</div>}
               </div>
             )}

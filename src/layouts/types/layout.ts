@@ -6,6 +6,28 @@ export interface PublicNavLink {
   icon?: ReactNode;
 }
 
+/** Brand rendered from data: glyph tile, name and optional tagline. */
+export interface PublicBrand {
+  mark: string;
+  name: string;
+  tagline?: string;
+  to?: string;
+}
+
+export interface PublicLanguageOption {
+  id: string;
+  label: string;
+  flag?: string;
+}
+
+export interface PublicLanguageSelector {
+  /** Accessible label for the trigger and the listbox. */
+  label?: string;
+  languages: PublicLanguageOption[];
+  activeId: string;
+  onSelect: (id: string) => void;
+}
+
 export interface PublicFooterColumn {
   heading: string;
   links: PublicNavLink[];
@@ -28,7 +50,8 @@ export interface PublicUser {
 export interface PublicLayoutConfig {
   navItems: PublicNavLink[];
   navLabel?: string;
-  brand?: ReactNode;
+  /** Rendered as the standard wordmark, or pass any ReactNode for a custom brand slot. */
+  brand?: ReactNode | PublicBrand;
   ctaPrimary?: PublicNavLink;
   ctaSecondary?: PublicNavLink;
   // Auth & Session
@@ -40,18 +63,23 @@ export interface PublicLayoutConfig {
     register?: PublicNavLink;
     app?: PublicNavLink;
   };
-  // Custom header actions (Language switcher, theme toggle, etc.)
+  // Built-in language switcher rendered next to the auth actions
+  languageSelector?: PublicLanguageSelector;
+  // Custom header actions (theme toggle, etc.)
   headerActions?: ReactNode;
   // Mobile navigation
   mobileNavItems?: PublicNavLink[];
   // Footer
-  footerBrand?: ReactNode;
+  footerBrand?: ReactNode | PublicBrand;
   footerNote?: ReactNode;
   footerColumns: PublicFooterColumn[];
   footerLegal?: ReactNode;
   footerLinks?: PublicNavLink[];
   mainId?: string;
+  // Chrome strings (provide translated labels from the host app)
   skipLabel?: string;
+  signOutLabel?: string;
+  profileLabel?: string;
 }
 
 export type LandingLayoutConfig = PublicLayoutConfig;
