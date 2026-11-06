@@ -6,6 +6,7 @@ import type {
   PublicBrand,
   PublicLanguageSelector,
   PublicLayoutConfig,
+  PublicNavLink,
   PublicUser,
   PublicUserNavAction,
 } from '../types/layout';
@@ -13,6 +14,18 @@ import type {
 export interface PublicSiteLayoutProps {
   config: PublicLayoutConfig;
   children?: ReactNode;
+}
+
+/** mailto:, tel:, https://, protocol-relative //… — anything react-router should not handle. */
+const EXTERNAL_HREF = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
+const WEB_HREF = /^(?:https?:)?\/\//i;
+
+function isExternalHref(to: string) {
+  return EXTERNAL_HREF.test(to);
+}
+
+function isHashHref(to: string) {
+  return to.includes('#');
 }
 
 function isBrandData(value: ReactNode | PublicBrand): value is PublicBrand {
@@ -43,6 +56,53 @@ function BrandWordmark({ brand, variant }: { brand: PublicBrand; variant: 'heade
 function BrandSlot({ value, variant }: { value: ReactNode | PublicBrand; variant: 'header' | 'footer' }) {
   if (isBrandData(value)) return <BrandWordmark brand={value} variant={variant} />;
   return <>{value}</>;
+}
+
+/** Plain anchor for external/mailto hrefs, Link (no active state) for hash anchors, NavLink otherwise. */
+function NavAnchor({ item, className, activeClassName }: { item: PublicNavLink; className: string; activeClassName: string }) {
+  if (isExternalHref(item.to)) {
+    const web = WEB_HREF.test(item.to);
+    return (
+      <a href={item.to} className={className} {...(web ? { target: '_blank', rel: 'noreferrer' } : {})}>
+        {item.icon}
+        {item.label}
+      </a>
+    );
+  }
+  if (isHashHref(item.to)) {
+    return (
+      <Link to={item.to} className={className}>
+        {item.icon}
+        {item.label}
+      </Link>
+    );
+  }
+  return (
+    <NavLink
+      to={item.to}
+      className={({ isActive }) => `${className}${isActive ? ` ${activeClassName}` : ''}`}
+    >
+      {item.icon}
+      {item.label}
+    </NavLink>
+  );
+}
+
+/** Footer links: same external handling, styled by the caller's class. */
+function FooterAnchor({ to, className, children }: { to: string; className?: string; children: ReactNode }) {
+  if (isExternalHref(to)) {
+    const web = WEB_HREF.test(to);
+    return (
+      <a href={to} className={className} {...(web ? { target: '_blank', rel: 'noreferrer' } : {})}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link to={to} className={className}>
+      {children}
+    </Link>
+  );
 }
 
 function useDismissOnOutsideClick<T extends HTMLElement>(isOpen: boolean, onClose: () => void) {
@@ -225,8 +285,16 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
   const location = useLocation();
 
   useEffect(() => {
+    if (location.hash) {
+      // Defer one frame so the target section is painted before scrolling to it.
+      const id = decodeURIComponent(location.hash.slice(1));
+      const frame = requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView?.({ behavior: 'smooth' });
+      });
+      return () => cancelAnimationFrame(frame);
+    }
     window.scrollTo({ top: 0 });
-  }, [location.pathname]);
+  }, [location.pathname, location.hash]);
 
   const mainId = config.mainId ?? 'site-main';
   const mobileNav = config.mobileNavItems ?? config.navItems;
@@ -247,20 +315,18 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
 
           <nav className="ul-site-nav" aria-label={config.navLabel ?? 'Site'}>
             {config.navItems.map((item) => (
-              <NavLink
+              <NavAnchor
                 key={item.to}
-                to={item.to}
-                className={({ isActive }) => `ul-site-link ${isActive ? 'ul-site-link--active' : ''}`}
-              >
-                {item.icon}
-                {item.label}
-              </NavLink>
+                item={item}
+                className="ul-site-link"
+                activeClassName="ul-site-link--active"
+              />
             ))}
           </nav>
 
           <div className="ul-site-actions">
             {config.languageSelector && <LanguageMenu selector={config.languageSelector} />}
-            {config.headerActions}
+            {config.headerActions && <div className="ul-site-header-extra">{config.headerActions}</div>}
 
             {config.user ? (
               <div className="ul-site-auth-group">
@@ -311,13 +377,12 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
         {mobileNav.length > 0 && (
           <nav className="ul-site-mobile-nav" aria-label={config.navLabel ?? 'Site'}>
             {mobileNav.map((item) => (
-              <NavLink
+              <NavAnchor
                 key={item.to}
-                to={item.to}
-                className={({ isActive }) => `ul-site-mobile-link ${isActive ? 'ul-site-mobile-link--active' : ''}`}
-              >
-                {item.label}
-              </NavLink>
+                item={item}
+                className="ul-site-mobile-link"
+                activeClassName="ul-site-mobile-link--active"
+              />
             ))}
           </nav>
         )}
@@ -340,9 +405,9 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
               <nav key={col.heading} className="ul-site-col" aria-label={col.heading}>
                 <h4>{col.heading}</h4>
                 {col.links.map((link) => (
-                  <Link key={link.to} to={link.to}>
+                  <FooterAnchor key={link.to} to={link.to}>
                     {link.label}
-                  </Link>
+                  </FooterAnchor>
                 ))}
               </nav>
             ))}
@@ -354,9 +419,9 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
               {config.footerLinks && config.footerLinks.length > 0 && (
                 <div className="ul-site-footer-links">
                   {config.footerLinks.map((link) => (
-                    <Link key={link.to} to={link.to} className="ul-site-footer-link">
+                    <FooterAnchor key={link.to} to={link.to} className="ul-site-footer-link">
                       {link.label}
-                    </Link>
+                    </FooterAnchor>
                   ))}
                 </div>
               )}

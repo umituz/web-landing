@@ -16,6 +16,33 @@ site chrome. Nothing public ever lives in the dashboard package.
   semantic color variables. Import after the design-system stylesheet;
   skin via your own `ul-site-*` overrides.
 
+### Link behavior
+
+Every link slot (`navItems`, `mobileNavItems`, `footerColumns`, `footerLinks`)
+renders the right element for its `to` value:
+
+- **Route hrefs** (`/features`) → `NavLink` with active-state styling
+  (nav) or `Link` (footer).
+- **Hash anchors** (`/#features`) → `Link` without active state — hash items
+  never carry `aria-current` or `--active`. The layout scrolls the target
+  into view (smooth, deferred one frame) on mount and hash change; give the
+  target section `scroll-margin-top` in host CSS so the sticky header
+  doesn't cover it.
+- **External hrefs** (`https://…`, `mailto:`, `tel:`, `//…`) → a plain
+  `<a>`; web URLs additionally get `target="_blank" rel="noreferrer"`.
+
+### Responsive header actions
+
+`headerActions` is wrapped in `.ul-site-header-extra`, which hides below
+640px — the same responsive behavior as the CTA buttons. Mobile users reach
+those destinations through `mobileNavItems`, so mirror any header action
+there (one line of config).
+
+### Brand mark
+
+`PublicBrand.mark` accepts a string (rendered in the glyph tile) or any
+`ReactNode` — e.g. a lucide icon or inline SVG — inside the same tile.
+
 ## Usage
 
 Everything is config. The host app supplies content (labels, routes,

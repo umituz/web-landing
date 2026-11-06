@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { PublicSiteLayout } from './PublicSiteLayout';
 import type { PublicLayoutConfig } from '../types/layout';
@@ -128,5 +128,80 @@ describe('PublicSiteLayout', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: /member/i }));
     expect(screen.getByText('Çıkış yap')).toBeTruthy();
+  });
+
+  it('renders external and mailto footer links as plain anchors', () => {
+    renderAt('/features', {
+      footerColumns: [
+        {
+          heading: 'Contact',
+          links: [
+            { to: 'mailto:hi@example.com', label: 'Email the team' },
+            { to: 'https://docs.example.com', label: 'External docs' },
+          ],
+        },
+      ],
+      footerLinks: [{ to: 'https://status.example.com', label: 'Status page' }],
+    });
+    const mail = screen.getByRole('link', { name: 'Email the team' }) as HTMLAnchorElement;
+    expect(mail.getAttribute('href')).toBe('mailto:hi@example.com');
+    expect(mail.getAttribute('target')).toBeNull();
+    const docs = screen.getByRole('link', { name: 'External docs' }) as HTMLAnchorElement;
+    expect(docs.getAttribute('href')).toBe('https://docs.example.com');
+    expect(docs.getAttribute('target')).toBe('_blank');
+    expect(docs.getAttribute('rel')).toBe('noreferrer');
+    const status = screen.getByRole('link', { name: 'Status page' }) as HTMLAnchorElement;
+    expect(status.getAttribute('href')).toBe('https://status.example.com');
+  });
+
+  it('renders hash anchor nav items without route-active state', () => {
+    renderAt('/', {
+      navItems: [
+        { to: '/#features', label: 'Features' },
+        { to: '/#pricing', label: 'Pricing' },
+      ],
+      mobileNavItems: [
+        { to: '/#features', label: 'Features' },
+        { to: '/#pricing', label: 'Pricing' },
+      ],
+    });
+    const links = screen
+      .getAllByRole('link')
+      .filter((el) => el.className.includes('ul-site-link') || el.className.includes('ul-site-mobile-link'));
+    expect(links.length).toBeGreaterThanOrEqual(4);
+    for (const link of links) {
+      expect(link.className).not.toContain('--active');
+      expect(link.getAttribute('aria-current')).toBeNull();
+    }
+  });
+
+  it('scrolls the hash target into view instead of resetting scroll', async () => {
+    const scrollIntoView = vi.fn();
+    const section = document.createElement('section');
+    section.id = 'pricing';
+    section.scrollIntoView = scrollIntoView;
+    document.body.appendChild(section);
+    try {
+      renderAt('/#pricing');
+      await waitFor(() => expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' }));
+    } finally {
+      section.remove();
+    }
+  });
+
+  it('renders a node brand mark inside the glyph tile', () => {
+    renderAt('/features', {
+      brand: { mark: <span aria-hidden="true">★</span>, name: 'Starfleet' },
+    });
+    const tile = document.querySelector('.ul-site-brand-mark') as HTMLElement;
+    expect(tile.textContent).toContain('★');
+  });
+
+  it('wraps custom header actions in the responsive container', () => {
+    renderAt('/features', {
+      headerActions: <button type="button">Toggle theme</button>,
+    });
+    const wrapper = document.querySelector('.ul-site-header-extra') as HTMLElement;
+    expect(wrapper.querySelector('button')?.textContent).toBe('Toggle theme');
   });
 });

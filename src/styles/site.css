@@ -247,6 +247,20 @@
   flex-shrink: 0;
 }
 
+/* Custom header actions share the CTA buttons' responsive behavior: desktop-only,
+   mobile users reach the same destinations through mobileNavItems. */
+.ul-site-header-extra {
+  display: flex;
+  align-items: center;
+  gap: var(--ul-space-2);
+}
+
+@media (max-width: 639px) {
+  .ul-site-header-extra {
+    display: none;
+  }
+}
+
 .ul-site-auth-group,
 .ul-site-guest-group {
   display: flex;

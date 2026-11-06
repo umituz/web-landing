@@ -6,9 +6,9 @@ export interface PublicNavLink {
   icon?: ReactNode;
 }
 
-/** Brand rendered from data: glyph tile, name and optional tagline. */
+/** Brand rendered from data: glyph tile (string or icon node), name and optional tagline. */
 export interface PublicBrand {
-  mark: string;
+  mark: string | ReactNode;
   name: string;
   tagline?: string;
   to?: string;
