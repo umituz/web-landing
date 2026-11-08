@@ -476,6 +476,19 @@
   flex: 1;
 }
 
+.ul-site-main,
+.ul-site-main [id] {
+  --ul-anchor-gap: 0.75rem;
+  scroll-margin-top: calc(4.25rem + var(--ul-anchor-gap));
+}
+
+@media (max-width: 1023px) {
+  .ul-site-main,
+  .ul-site-main [id] {
+    scroll-margin-top: calc(4.25rem + 3.6rem + var(--ul-anchor-gap));
+  }
+}
+
 /* Footer */
 .ul-site-footer {
   border-top: 1px solid var(--color-line, rgba(0, 0, 0, 0.08));
