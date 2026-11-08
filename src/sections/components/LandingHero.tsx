@@ -8,7 +8,7 @@ export function LandingHero({ kicker, title, titleEm, lead, primary, secondary, 
   return (
     <section className="ul-land-hero">
       {kicker && (
-        <Badge variant="outline" size="sm" className="ul-land-hero-badge">
+        <Badge variant="neutral" size="sm" className="ul-land-hero-badge">
           {KickerIcon && <KickerIcon size={13} aria-hidden="true" />}
           {kicker.label}
         </Badge>

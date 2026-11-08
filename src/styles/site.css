@@ -613,7 +613,10 @@
 .ul-land-hero-badge {
   gap: var(--ul-space-2);
   color: var(--color-primary, #33406b);
+  background: var(--color-paper, #ffffff);
+  border-color: var(--color-line, #d8dce6);
   font-size: 0.8125rem;
+  font-weight: 600;
 }
 
 .ul-land-hero-title {
