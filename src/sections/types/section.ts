@@ -11,6 +11,17 @@ export interface LandingKicker {
   label: string;
 }
 
+export interface LandingChipItem {
+  to: string;
+  label: string;
+  icon?: ReactNode;
+}
+
+export interface LandingStatItem {
+  value: string;
+  label: string;
+}
+
 export interface LandingContainerProps {
   children: ReactNode;
 }
@@ -23,17 +34,21 @@ export interface LandingHeroProps {
   primary?: LandingAction;
   secondary?: LandingAction;
   note?: string;
+  stats?: readonly LandingStatItem[];
 }
 
 export interface LandingChipsProps {
-  items: string[];
+  items: readonly (string | LandingChipItem)[];
   label?: string;
 }
 
 export interface LandingCardData {
   icon?: LucideIcon;
   title: string;
-  body: string;
+  body?: string;
+  points?: readonly string[];
+  to?: string;
+  cta?: string;
 }
 
 export interface LandingCardProps extends LandingCardData {
@@ -47,6 +62,7 @@ export interface LandingSectionProps {
   intro?: string;
   cards?: LandingCardData[];
   children?: ReactNode;
+  action?: LandingAction;
   alt?: boolean;
   featured?: boolean;
   columns?: 2 | 3 | 4;
@@ -59,6 +75,8 @@ export interface LandingStepData {
 }
 
 export interface LandingStepsProps {
+  id?: string;
+  kicker?: string;
   title: string;
   intro?: string;
   steps: LandingStepData[];

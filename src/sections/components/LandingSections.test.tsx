@@ -37,6 +37,25 @@ describe('LandingHero', () => {
     expect(screen.getByText('No card required.').textContent).toContain('No card');
   });
 
+  it('renders the stats strip under the actions', () => {
+    renderKit(
+      <LandingHero
+        title="T"
+        lead="L"
+        primary={{ to: '/go', label: 'Go' }}
+        stats={[
+          { value: '12,400+', label: 'events planned' },
+          { value: '40', label: 'cities at launch' },
+        ]}
+      />,
+    );
+    const stats = document.querySelector('.ul-land-hero-stats');
+    expect(stats?.tagName).toBe('DL');
+    expect(stats?.querySelectorAll('div')).toHaveLength(2);
+    expect(screen.getByText('12,400+').tagName).toBe('DT');
+    expect(screen.getByText('cities at launch').tagName).toBe('DD');
+  });
+
   it('renders without kicker and secondary CTA', () => {
     renderKit(<LandingHero title="T" lead="L" primary={{ to: '/go', label: 'Go' }} />);
     expect(screen.queryByText('Field OS')).toBeNull();
@@ -49,6 +68,25 @@ describe('LandingChips', () => {
     renderKit(<LandingChips items={['Fields', 'Livestock', 'Finance']} label="Modules" />);
     const strip = screen.getByLabelText('Modules');
     expect(strip.querySelectorAll('.ul-land-chip')).toHaveLength(3);
+  });
+
+  it('renders linked chips with optional icons alongside plain chips', () => {
+    renderKit(
+      <LandingChips
+        items={[
+          'Plain',
+          { to: '/events/new?type=wedding', label: 'Weddings', icon: <Sprout size={16} aria-hidden="true" /> },
+          { to: '/categories', label: 'All categories' },
+        ]}
+        label="Start here"
+      />,
+    );
+    const wedding = screen.getByRole('link', { name: 'Weddings' });
+    expect(wedding.getAttribute('href')).toBe('/events/new?type=wedding');
+    expect(wedding.className).toContain('ul-land-chip--link');
+    expect(wedding.querySelector('svg')).not.toBeNull();
+    expect(screen.getByRole('link', { name: 'All categories' }).getAttribute('href')).toBe('/categories');
+    expect(screen.getByText('Plain').className).not.toContain('ul-land-chip--link');
   });
 });
 
@@ -88,13 +126,53 @@ describe('LandingSection', () => {
     );
     expect(screen.getByText('child-content').textContent).toBe('child-content');
   });
+
+  it('renders a section action link below the cards', () => {
+    renderKit(
+      <LandingSection title="Every side" intro="One ecosystem." action={{ to: '/dashboard', label: 'See it in action' }}>
+        <p>child-content</p>
+      </LandingSection>,
+    );
+    const action = screen.getByRole('link', { name: 'See it in action' });
+    expect(action.getAttribute('href')).toBe('/dashboard');
+    expect(action.className).toContain('ul-land-section-action');
+  });
+
+  it('renders point-list cards without body and whole cards as links with a cta', () => {
+    renderKit(
+      <LandingSection
+        title="Three sides"
+        cards={[
+          {
+            icon: Map,
+            title: 'For customers',
+            points: ['Compare offers', 'Manage policies'],
+          },
+          {
+            icon: Sprout,
+            title: 'For providers',
+            body: 'Publish products.',
+            to: '/providers',
+            cta: 'Open your profile',
+          },
+        ]}
+      />,
+    );
+    const points = document.querySelector('.ul-land-card-points');
+    expect(points?.querySelectorAll('li')).toHaveLength(2);
+    const linkedCard = screen.getByRole('link', { name: /For providers/ });
+    expect(linkedCard.className).toContain('ul-land-card--link');
+    expect(linkedCard.querySelector('.ul-land-card-cta')?.textContent).toContain('Open your profile');
+  });
 });
 
 describe('LandingSteps', () => {
-  it('renders a numbered ordered list of steps', () => {
+  it('renders a numbered ordered list of steps with id and kicker', () => {
     renderKit(
       <LandingSteps
-        title="How it works"
+        id="how"
+        kicker="How it works"
+        title="Three steps, no jargon"
         intro="Three steps."
         steps={[
           { icon: Sprout, title: 'Plan', body: 'Set the season.' },
@@ -103,6 +181,8 @@ describe('LandingSteps', () => {
         ]}
       />,
     );
+    expect(document.getElementById('how')).not.toBeNull();
+    expect(screen.getByText('How it works').className).toContain('ul-land-kicker-plain');
     const list = screen.getByRole('list');
     expect(list.tagName).toBe('OL');
     const items = list.querySelectorAll('.ul-land-step');

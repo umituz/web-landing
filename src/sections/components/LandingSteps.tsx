@@ -1,9 +1,10 @@
 import type { LandingStepsProps } from '../types/section';
 
-export function LandingSteps({ title, intro, steps }: LandingStepsProps) {
+export function LandingSteps({ id, kicker, title, intro, steps }: LandingStepsProps) {
   return (
-    <section className="ul-land-section">
+    <section id={id} className="ul-land-section">
       <div className="ul-land-section-inner">
+        {kicker && <p className="ul-land-kicker-plain">{kicker}</p>}
         <h2 className="ul-land-section-title">{title}</h2>
         {intro && <p className="ul-land-section-intro">{intro}</p>}
         <ol className="ul-land-steps">

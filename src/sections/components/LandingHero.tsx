@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { Badge, Button } from '@umituz/web-design-system/atoms';
 import type { LandingHeroProps } from '../types/section';
 
-export function LandingHero({ kicker, title, titleEm, lead, primary, secondary, note }: LandingHeroProps) {
+export function LandingHero({ kicker, title, titleEm, lead, primary, secondary, note, stats }: LandingHeroProps) {
   const KickerIcon = kicker?.icon;
   return (
     <section className="ul-land-hero">
@@ -35,6 +35,16 @@ export function LandingHero({ kicker, title, titleEm, lead, primary, secondary, 
         </div>
       )}
       {note && <p className="ul-land-note">{note}</p>}
+      {stats && stats.length > 0 && (
+        <dl className="ul-land-hero-stats">
+          {stats.map((stat) => (
+            <div key={stat.label}>
+              <dt>{stat.value}</dt>
+              <dd>{stat.label}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </section>
   );
 }
