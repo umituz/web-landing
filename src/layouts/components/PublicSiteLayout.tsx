@@ -289,7 +289,13 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
       // Defer one frame so the target section is painted before scrolling to it.
       const id = decodeURIComponent(location.hash.slice(1));
       const frame = requestAnimationFrame(() => {
-        document.getElementById(id)?.scrollIntoView?.({ behavior: 'smooth' });
+        const target = document.getElementById(id);
+        if (!target) return;
+        const header = document.querySelector('.ul-site-header');
+        const offset =
+          header instanceof HTMLElement && header.offsetHeight > 0 ? header.offsetHeight + 12 : 0;
+        const top = Math.max(target.getBoundingClientRect().top + window.scrollY - offset, 0);
+        window.scrollTo({ top, behavior: 'smooth' });
       });
       return () => cancelAnimationFrame(frame);
     }

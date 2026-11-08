@@ -175,16 +175,23 @@ describe('PublicSiteLayout', () => {
     }
   });
 
-  it('scrolls the hash target into view instead of resetting scroll', async () => {
-    const scrollIntoView = vi.fn();
+  it('scrolls the hash target clear of the sticky header instead of resetting scroll', async () => {
+    const scrollTo = vi.fn();
+    const originalScrollTo = window.scrollTo;
+    window.scrollTo = scrollTo;
     const section = document.createElement('section');
     section.id = 'pricing';
-    section.scrollIntoView = scrollIntoView;
+    section.getBoundingClientRect = () => ({ top: 500 } as DOMRect);
     document.body.appendChild(section);
     try {
       renderAt('/#pricing');
-      await waitFor(() => expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' }));
+      const header = document.querySelector('.ul-site-header') as HTMLElement;
+      Object.defineProperty(header, 'offsetHeight', { value: 97 });
+      await waitFor(() =>
+        expect(scrollTo).toHaveBeenCalledWith({ top: 500 + window.scrollY - 97 - 12, behavior: 'smooth' }),
+      );
     } finally {
+      window.scrollTo = originalScrollTo;
       section.remove();
     }
   });
