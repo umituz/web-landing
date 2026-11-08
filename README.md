@@ -86,3 +86,71 @@ import '@umituz/web-landing/site.css';
 
 The package is i18n-agnostic: every visible chrome string comes from the
 config, so the host app decides how it is translated.
+
+## Landing section kit (1.6.0)
+
+`PublicSiteLayout` owns the site chrome; the section kit owns the landing
+**content skeleton** — hero, chip strip, feature sections, steps and the
+closing CTA that every fleet landing was hand-rolling in per-project CSS.
+Components live next to the shell, are styled by the same `site.css`
+(`ul-land-*` on `@umituz/web-design-system` semantic tokens) and consume DS
+atoms directly: `Button` for every CTA, `Badge` for the hero kicker.
+
+```tsx
+import {
+  LandingContainer,
+  LandingHero,
+  LandingChips,
+  LandingSection,
+  LandingSteps,
+  LandingCta,
+} from '@umituz/web-landing/sections';
+
+<LandingContainer>
+  <LandingHero
+    kicker={{ icon: Leaf, label: 'Farm operations' }}
+    title="Run the farm "
+    titleEm="end to end"
+    lead="One workspace for fields, livestock and finance."
+    primary={{ to: '/dashboard', label: 'Open the app' }}
+    secondary={{ to: '/#platform', label: 'Explore the platform' }}
+    note="Sign in with an email magic link."
+  />
+  <LandingChips items={['Fields', 'Livestock', 'Poultry', 'Finance']} label="Modules" />
+  <LandingSection
+    id="platform"
+    kicker="Platform"
+    title="Every module your operation needs"
+    intro="Fourteen connected modules replace the spreadsheet stack."
+    cards={[
+      { icon: Sprout, title: 'Fields', body: 'Plan, sow and track every plot.' },
+      { icon: Beef, title: 'Livestock', body: 'Herd records, health and yields.' },
+    ]}
+    alt
+  />
+  <LandingSteps
+    title="How it works"
+    steps={[
+      { icon: Compass, title: 'Plan', body: 'Set the season.' },
+      { icon: Map, title: 'Track', body: 'Follow every plot.' },
+    ]}
+  />
+  <LandingCta
+    title="Bring the whole operation "
+    titleEm="into one workspace"
+    body="Stop stitching spreadsheets together."
+    primary={{ to: '/dashboard', label: 'Get started' }}
+  />
+</LandingContainer>
+```
+
+- `LandingHero` — DS `Badge` kicker with optional lucide icon, `title` +
+  `titleEm` (the `<em>` accent), lead, CTA pair (DS `Button`), note.
+- `LandingChips` — module strip under the hero.
+- `LandingSection` — `id` (hash-scroll target), optional kicker/title/intro,
+  `cards` (icon + title + body) or custom `children`, `alt` band,
+  `featured` cards, `columns` 2/3/4.
+- `LandingSteps` — numbered ordered list with icons.
+- `LandingCta` — closing panel with `titleEm` accent and primary action.
+- `LandingContainer` — the `.ul-land` wrapper; drop it inside
+  `PublicSiteLayout`.

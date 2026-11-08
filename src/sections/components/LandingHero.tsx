@@ -1,0 +1,37 @@
+import { ArrowRight } from 'lucide-react';
+import { Badge, Button } from '@umituz/web-design-system/atoms';
+import type { LandingHeroProps } from '../types/section';
+
+export function LandingHero({ kicker, title, titleEm, lead, primary, secondary, note }: LandingHeroProps) {
+  const KickerIcon = kicker?.icon;
+  return (
+    <section className="ul-land-hero">
+      {kicker && (
+        <Badge variant="outline" size="sm" className="ul-land-hero-badge">
+          {KickerIcon && <KickerIcon size={13} aria-hidden="true" />}
+          {kicker.label}
+        </Badge>
+      )}
+      <h1 className="ul-land-hero-title">
+        {title}
+        {titleEm && <em>{titleEm}</em>}
+      </h1>
+      <p className="ul-land-hero-lead">{lead}</p>
+      {(primary || secondary) && (
+        <div className="ul-land-cta">
+          {primary && (
+            <Button to={primary.to} size="lg" iconRight={<ArrowRight size={16} aria-hidden="true" />}>
+              {primary.label}
+            </Button>
+          )}
+          {secondary && (
+            <Button to={secondary.to} variant="secondary" size="lg">
+              {secondary.label}
+            </Button>
+          )}
+        </div>
+      )}
+      {note && <p className="ul-land-note">{note}</p>}
+    </section>
+  );
+}
