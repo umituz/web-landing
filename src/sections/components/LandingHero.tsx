@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router';
 import { Badge, Button } from '@umituz/web-design-system/atoms';
 import type { LandingHeroProps } from '../types/section';
 
@@ -20,13 +21,15 @@ export function LandingHero({ kicker, title, titleEm, lead, primary, secondary, 
       {(primary || secondary) && (
         <div className="ul-land-cta">
           {primary && (
-            <Button to={primary.to} size="lg" iconRight={<ArrowRight size={16} aria-hidden="true" />}>
-              {primary.label}
+            <Button asChild size="lg">
+              <Link to={primary.to}>
+                {primary.label} <ArrowRight size={16} aria-hidden="true" />
+              </Link>
             </Button>
           )}
           {secondary && (
-            <Button to={secondary.to} variant="secondary" size="lg">
-              {secondary.label}
+            <Button asChild variant="secondary" size="lg">
+              <Link to={secondary.to}>{secondary.label}</Link>
             </Button>
           )}
         </div>
