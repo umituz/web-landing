@@ -187,8 +187,8 @@ describe('LandingSteps', () => {
     expect(list.tagName).toBe('OL');
     const items = list.querySelectorAll('.ul-land-step');
     expect(items).toHaveLength(3);
-    expect(items[0].querySelector('.ul-land-step-num')?.textContent).toBe('1');
-    expect(items[2].querySelector('.ul-land-step-num')?.textContent).toBe('3');
+    expect(items[0]?.querySelector('.ul-land-step-num')?.textContent).toBe('1');
+    expect(items[2]?.querySelector('.ul-land-step-num')?.textContent).toBe('3');
   });
 });
 
