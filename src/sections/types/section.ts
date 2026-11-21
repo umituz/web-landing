@@ -89,3 +89,64 @@ export interface LandingCtaProps {
   primary: LandingAction;
   secondary?: LandingAction;
 }
+
+export interface LandingPricingPlan {
+  name: string;
+  badge?: string;
+  price: string;
+  period?: string;
+  description?: string;
+  features: readonly string[];
+  action: LandingAction;
+  featured?: boolean;
+}
+
+export interface LandingPricingBillingToggle {
+  monthlyLabel: string;
+  annualLabel: string;
+  isAnnual: boolean;
+  onToggle: (annual: boolean) => void;
+  discountBadge?: string;
+}
+
+export interface LandingPricingProps {
+  id?: string;
+  kicker?: string;
+  title: string;
+  titleEm?: string;
+  intro?: string;
+  billingToggle?: LandingPricingBillingToggle;
+  plans: readonly LandingPricingPlan[];
+  note?: string;
+}
+
+export interface LandingFaqItem {
+  question: string;
+  answer: ReactNode;
+}
+
+export interface LandingFaqProps {
+  id?: string;
+  kicker?: string;
+  title: string;
+  intro?: string;
+  items: readonly LandingFaqItem[];
+}
+
+export interface LandingTestimonialItem {
+  quote: string;
+  name: string;
+  role?: string;
+  company?: string;
+  avatarUrl?: string;
+  rating?: number;
+}
+
+export interface LandingTestimonialsProps {
+  id?: string;
+  kicker?: string;
+  title: string;
+  intro?: string;
+  testimonials: readonly LandingTestimonialItem[];
+  columns?: 2 | 3;
+}

@@ -995,3 +995,307 @@
   color: color-mix(in srgb, var(--color-ink, #23252b) 72%, transparent);
   text-wrap: pretty;
 }
+
+.ul-land-pricing-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ul-space-1);
+  padding: var(--ul-space-1);
+  margin: 0 auto var(--ul-space-8);
+  border-radius: var(--radius-full, 9999px);
+  border: 1px solid var(--color-line, rgba(0, 0, 0, 0.1));
+  background: var(--color-paper, #ffffff);
+}
+
+.ul-land-pricing-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ul-space-2);
+  padding: var(--ul-space-2) var(--ul-space-4);
+  border-radius: var(--radius-full, 9999px);
+  border: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--color-ink, #23252b) 70%, transparent);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ul-land-pricing-toggle-btn.is-active {
+  background: var(--color-primary, #33406b);
+  color: var(--color-primary-foreground, #ffffff);
+}
+
+.ul-land-pricing-discount {
+  margin-left: var(--ul-space-1);
+}
+
+.ul-land-pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ul-space-6);
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .ul-land-pricing-grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .ul-land-pricing-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .ul-land-pricing-grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.ul-land-price-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--ul-space-8);
+  border-radius: var(--radius-xl, 16px);
+  border: 1px solid var(--color-line, rgba(0, 0, 0, 0.1));
+  background: var(--color-card, #ffffff);
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ul-land-price-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+}
+
+.ul-land-price-card--featured {
+  border-color: var(--color-primary, #33406b);
+  box-shadow: 0 0 0 1px var(--color-primary, #33406b), var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+  position: relative;
+}
+
+.ul-land-price-header {
+  margin-bottom: var(--ul-space-6);
+}
+
+.ul-land-price-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ul-space-2);
+  margin-bottom: var(--ul-space-2);
+}
+
+.ul-land-price-name {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-ink, #23252b);
+}
+
+.ul-land-price-desc {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--color-ink, #23252b) 70%, transparent);
+}
+
+.ul-land-price-amount {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ul-space-2);
+  margin-bottom: var(--ul-space-6);
+}
+
+.ul-land-price-value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-ink, #23252b);
+}
+
+.ul-land-price-period {
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--color-ink, #23252b) 60%, transparent);
+}
+
+.ul-land-price-features {
+  list-style: none;
+  margin: 0 0 var(--ul-space-8) 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ul-space-3);
+  flex-grow: 1;
+}
+
+.ul-land-price-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ul-space-3);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-ink, #23252b);
+}
+
+.ul-land-price-check {
+  color: var(--color-primary, #33406b);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ul-land-price-action {
+  margin-top: auto;
+}
+
+.ul-land-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ul-space-3);
+  max-width: 48rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ul-land-faq-item {
+  border-radius: var(--radius-lg, 12px);
+  border: 1px solid var(--color-line, rgba(0, 0, 0, 0.1));
+  background: var(--color-card, #ffffff);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.ul-land-faq-item[open] {
+  border-color: color-mix(in srgb, var(--color-primary, #33406b) 40%, var(--color-line, rgba(0, 0, 0, 0.1)));
+}
+
+.ul-land-faq-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ul-space-4);
+  padding: var(--ul-space-4) var(--ul-space-6);
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-ink, #23252b);
+  outline: none;
+}
+
+.ul-land-faq-summary::-webkit-details-marker {
+  display: none;
+}
+
+.ul-land-faq-summary:focus-visible {
+  outline: 2px solid var(--color-primary, #33406b);
+  outline-offset: -2px;
+}
+
+.ul-land-faq-chevron {
+  flex-shrink: 0;
+  color: color-mix(in srgb, var(--color-ink, #23252b) 50%, transparent);
+  transition: transform 0.2s ease;
+}
+
+.ul-land-faq-item[open] .ul-land-faq-chevron {
+  transform: rotate(180deg);
+}
+
+.ul-land-faq-answer {
+  padding: 0 var(--ul-space-6) var(--ul-space-6);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--color-ink, #23252b) 80%, transparent);
+}
+
+.ul-land-faq-answer p {
+  margin: 0;
+}
+
+.ul-land-faq-answer p + p {
+  margin-top: var(--ul-space-3);
+}
+
+.ul-land-testimonial-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--ul-space-6);
+  border-radius: var(--radius-xl, 16px);
+  border: 1px solid var(--color-line, rgba(0, 0, 0, 0.1));
+  background: var(--color-card, #ffffff);
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+}
+
+.ul-land-testimonial-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: var(--ul-space-4);
+}
+
+.ul-land-testimonial-rating .is-filled {
+  color: #f59e0b;
+  fill: #f59e0b;
+}
+
+.ul-land-testimonial-rating .is-empty {
+  color: color-mix(in srgb, var(--color-ink, #23252b) 20%, transparent);
+}
+
+.ul-land-testimonial-quote {
+  margin: 0 0 var(--ul-space-6) 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--color-ink, #23252b) 85%, transparent);
+  font-style: italic;
+  flex-grow: 1;
+}
+
+.ul-land-testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: var(--ul-space-3);
+  margin-top: auto;
+}
+
+.ul-land-testimonial-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full, 9999px);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ul-land-testimonial-avatar-fallback {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full, 9999px);
+  background: var(--color-primary, #33406b);
+  color: var(--color-primary-foreground, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.ul-land-testimonial-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.ul-land-testimonial-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink, #23252b);
+}
+
+.ul-land-testimonial-meta {
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--color-ink, #23252b) 60%, transparent);
+}

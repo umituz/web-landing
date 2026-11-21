@@ -286,8 +286,10 @@ export const PublicSiteLayout = ({ config, children }: PublicSiteLayoutProps) =>
 
   useEffect(() => {
     if (location.hash) {
-      // Defer one frame so the target section is painted before scrolling to it.
-      const id = decodeURIComponent(location.hash.slice(1));
+      let id = location.hash.slice(1);
+      try {
+        id = decodeURIComponent(id);
+      } catch {}
       const frame = requestAnimationFrame(() => {
         const target = document.getElementById(id);
         if (!target) return;

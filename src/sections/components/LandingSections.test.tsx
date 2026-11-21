@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { Sprout, Map } from 'lucide-react';
 import {
@@ -9,6 +9,9 @@ import {
   LandingSection,
   LandingSteps,
   LandingCta,
+  LandingPricing,
+  LandingFaq,
+  LandingTestimonials,
 } from './index';
 
 function renderKit(ui: React.ReactElement) {
@@ -213,5 +216,132 @@ describe('LandingContainer', () => {
     renderKit(<LandingContainer><span>inner</span></LandingContainer>);
     expect(document.querySelector('.ul-land')).not.toBeNull();
     expect(screen.getByText('inner').textContent).toBe('inner');
+  });
+});
+
+describe('LandingPricing', () => {
+  it('renders plans with features, badges, prices and action links', () => {
+    const onToggle = vi.fn();
+    renderKit(
+      <LandingPricing
+        id="pricing"
+        kicker="Simple Plans"
+        title="Predictable pricing "
+        titleEm="for every scale"
+        intro="Start small, scale as you grow."
+        billingToggle={{
+          monthlyLabel: 'Monthly',
+          annualLabel: 'Yearly',
+          isAnnual: false,
+          onToggle,
+          discountBadge: 'Save 20%',
+        }}
+        plans={[
+          {
+            name: 'Starter',
+            price: '$19',
+            period: '/mo',
+            description: 'Essential tools for solo creators.',
+            features: ['1 Project', '10GB Storage', 'Community support'],
+            action: { to: '/register?plan=starter', label: 'Start Free' },
+          },
+          {
+            name: 'Pro',
+            badge: 'Popular',
+            featured: true,
+            price: '$49',
+            period: '/mo',
+            description: 'Advanced features for scaling teams.',
+            features: ['Unlimited Projects', '100GB Storage', 'Priority support'],
+            action: { to: '/register?plan=pro', label: 'Upgrade to Pro' },
+          },
+        ]}
+        note="All plans include a 14-day free trial."
+      />,
+    );
+
+    expect(document.getElementById('pricing')).not.toBeNull();
+    expect(screen.getByText('Simple Plans')).toBeDefined();
+    expect(screen.getByText('Starter')).toBeDefined();
+    expect(screen.getByText('Pro')).toBeDefined();
+    expect(screen.getByText('Popular')).toBeDefined();
+    expect(screen.getByText('$19')).toBeDefined();
+    expect(screen.getByText('$49')).toBeDefined();
+    expect(screen.getByText('All plans include a 14-day free trial.')).toBeDefined();
+
+    const yearlyBtn = screen.getByRole('button', { name: /Yearly/ });
+    fireEvent.click(yearlyBtn);
+    expect(onToggle).toHaveBeenCalledWith(true);
+
+    const proLink = screen.getByRole('link', { name: 'Upgrade to Pro' });
+    expect(proLink.getAttribute('href')).toBe('/register?plan=pro');
+  });
+});
+
+describe('LandingFaq', () => {
+  it('renders accordion questions and answers', () => {
+    renderKit(
+      <LandingFaq
+        id="faq"
+        kicker="Got questions?"
+        title="Frequently Asked Questions"
+        intro="Everything you need to know."
+        items={[
+          {
+            question: 'Can I cancel anytime?',
+            answer: 'Yes, you can cancel your subscription at any moment.',
+          },
+          {
+            question: 'Do you offer refunds?',
+            answer: <span>Full refund within 30 days.</span>,
+          },
+        ]}
+      />,
+    );
+
+    expect(document.getElementById('faq')).not.toBeNull();
+    expect(screen.getByText('Frequently Asked Questions')).toBeDefined();
+    expect(screen.getByText('Can I cancel anytime?')).toBeDefined();
+    expect(screen.getByText('Yes, you can cancel your subscription at any moment.')).toBeDefined();
+    expect(screen.getByText('Do you offer refunds?')).toBeDefined();
+    expect(screen.getByText('Full refund within 30 days.')).toBeDefined();
+  });
+});
+
+describe('LandingTestimonials', () => {
+  it('renders quotes, star ratings, and author info', () => {
+    renderKit(
+      <LandingTestimonials
+        id="reviews"
+        kicker="Loved by teams"
+        title="What creators are saying"
+        testimonials={[
+          {
+            quote: 'This tool replaced three separate spreadsheets.',
+            name: 'Sarah Connor',
+            role: 'VP Operations',
+            company: 'TechCorp',
+            rating: 5,
+          },
+          {
+            quote: 'The speed and reliability are unmatched.',
+            name: 'Alex Mercer',
+            avatarUrl: 'https://example.com/avatar.jpg',
+            company: 'DesignCo',
+            rating: 4,
+          },
+        ]}
+      />,
+    );
+
+    expect(document.getElementById('reviews')).not.toBeNull();
+    expect(screen.getByText('What creators are saying')).toBeDefined();
+    expect(screen.getByText('"This tool replaced three separate spreadsheets."')).toBeDefined();
+    expect(screen.getByText('Sarah Connor')).toBeDefined();
+    expect(screen.getByText('VP Operations · TechCorp')).toBeDefined();
+    expect(screen.getByRole('img', { name: '5 out of 5 stars' })).toBeDefined();
+
+    const img = screen.getByRole('img', { name: 'Alex Mercer' });
+    expect(img.getAttribute('src')).toBe('https://example.com/avatar.jpg');
   });
 });

@@ -5,3 +5,6 @@ export { LandingSection } from './LandingSection';
 export { LandingCard } from './LandingCard';
 export { LandingSteps } from './LandingSteps';
 export { LandingCta } from './LandingCta';
+export { LandingPricing } from './LandingPricing';
+export { LandingFaq } from './LandingFaq';
+export { LandingTestimonials } from './LandingTestimonials';
