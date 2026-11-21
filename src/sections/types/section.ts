@@ -150,3 +150,110 @@ export interface LandingTestimonialsProps {
   testimonials: readonly LandingTestimonialItem[];
   columns?: 2 | 3;
 }
+
+export interface LandingPageScaffoldProps {
+  id?: string;
+  kicker?: string;
+  title: string;
+  titleEm?: string;
+  intro?: string;
+  children: ReactNode;
+  alt?: boolean;
+  className?: string;
+}
+
+export interface LandingStatsItem {
+  value: string;
+  label: string;
+  description?: string;
+  badge?: string;
+}
+
+export interface LandingStatsProps {
+  id?: string;
+  kicker?: string;
+  title?: string;
+  titleEm?: string;
+  intro?: string;
+  stats: readonly LandingStatsItem[];
+  columns?: 2 | 3 | 4;
+  alt?: boolean;
+  className?: string;
+}
+
+export interface LandingLogoItem {
+  name: string;
+  logo?: ReactNode;
+  href?: string;
+}
+
+export interface LandingLogoCloudProps {
+  id?: string;
+  title?: string;
+  logos: readonly LandingLogoItem[];
+  alt?: boolean;
+  className?: string;
+}
+
+export interface LandingContactChannel {
+  icon?: LucideIcon;
+  title: string;
+  detail: string;
+  note?: string;
+  href?: string;
+}
+
+export interface LandingContactProps {
+  id?: string;
+  kicker?: string;
+  title: string;
+  titleEm?: string;
+  intro?: string;
+  channels?: readonly LandingContactChannel[];
+  onSubmit?: (data: { name: string; email: string; subject?: string; message: string }) => void | Promise<void>;
+  submitLabel?: string;
+  successMessage?: string;
+  alt?: boolean;
+  className?: string;
+}
+
+export interface LandingChangelogItem {
+  version: string;
+  date: string;
+  title: string;
+  summary?: string;
+  badge?: {
+    label: string;
+    variant?: 'success' | 'warning' | 'info' | 'neutral' | 'primary' | 'outline';
+  };
+  items: readonly string[];
+}
+
+export interface LandingChangelogProps {
+  id?: string;
+  kicker?: string;
+  title: string;
+  titleEm?: string;
+  intro?: string;
+  entries: readonly LandingChangelogItem[];
+  alt?: boolean;
+  className?: string;
+}
+
+export interface TurnkeyLandingPageConfig {
+  hero: LandingHeroProps;
+  logoCloud?: LandingLogoCloudProps;
+  stats?: LandingStatsProps;
+  section?: LandingSectionProps;
+  steps?: LandingStepsProps;
+  testimonials?: LandingTestimonialsProps;
+  pricing?: LandingPricingProps;
+  faq?: LandingFaqProps;
+  contact?: LandingContactProps;
+  cta?: LandingCtaProps;
+}
+
+export interface TurnkeyLandingPageProps {
+  config: TurnkeyLandingPageConfig;
+  className?: string;
+}
