@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { Check, X } from 'lucide-react';
 import { Link } from 'react-router';
 import { Badge, Button } from '@umituz/web-design-system/atoms';
@@ -68,47 +69,72 @@ export function LandingComparison({
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, idx) => (
-                <tr key={`${row.name}-${idx}`} className="ul-land-comparison-row">
-                  <td className="ul-land-comparison-feature-cell">
-                    <div className="ul-land-comparison-feature-name">{row.name}</div>
-                    {row.description ? (
-                      <div className="ul-land-comparison-feature-desc">{row.description}</div>
-                    ) : null}
-                  </td>
-                  {tiers.map((tier) => {
-                    const value = row.values[tier.id];
-                    return (
-                      <td
-                        key={`${tier.id}-${row.name}`}
-                        className={`ul-land-comparison-value-cell ${
-                          tier.highlight ? 'ul-land-comparison-value-cell--highlight' : ''
-                        }`}
-                      >
-                        {typeof value === 'boolean' ? (
-                          value ? (
-                            <Check
-                              size={18}
-                              className="ul-land-comparison-check"
-                              aria-label="Included"
-                            />
-                          ) : (
-                            <X
-                              size={18}
-                              className="ul-land-comparison-cross"
-                              aria-label="Not included"
-                            />
-                          )
-                        ) : (
-                          <span className="ul-land-comparison-text-value">
-                            {value ?? '-'}
-                          </span>
-                        )}
+              {rows.map((row, idx) => {
+                if (row.isCategoryHeader) {
+                  return (
+                    <tr key={`cat-${row.name}-${idx}`} className="ul-land-comparison-category-row">
+                      <td colSpan={tiers.length + 1}>
+                        <span className="ul-land-comparison-category-label">{row.name}</span>
                       </td>
-                    );
-                  })}
-                </tr>
-              ))}
+                    </tr>
+                  );
+                }
+
+                const prevRow = idx > 0 ? rows[idx - 1] : undefined;
+                const showCategoryDivider =
+                  row.category && (!prevRow || prevRow.category !== row.category);
+
+                return (
+                  <Fragment key={`${row.name}-${idx}`}>
+                    {showCategoryDivider ? (
+                      <tr className="ul-land-comparison-category-row">
+                        <td colSpan={tiers.length + 1}>
+                          <span className="ul-land-comparison-category-label">{row.category}</span>
+                        </td>
+                      </tr>
+                    ) : null}
+                    <tr className="ul-land-comparison-row">
+                      <td className="ul-land-comparison-feature-cell">
+                        <div className="ul-land-comparison-feature-name">{row.name}</div>
+                        {row.description ? (
+                          <div className="ul-land-comparison-feature-desc">{row.description}</div>
+                        ) : null}
+                      </td>
+                      {tiers.map((tier) => {
+                        const value = row.values?.[tier.id];
+                        return (
+                          <td
+                            key={`${tier.id}-${row.name}`}
+                            className={`ul-land-comparison-value-cell ${
+                              tier.highlight ? 'ul-land-comparison-value-cell--highlight' : ''
+                            }`}
+                          >
+                            {typeof value === 'boolean' ? (
+                              value ? (
+                                <Check
+                                  size={18}
+                                  className="ul-land-comparison-check"
+                                  aria-label="Included"
+                                />
+                              ) : (
+                                <X
+                                  size={18}
+                                  className="ul-land-comparison-cross"
+                                  aria-label="Not included"
+                                />
+                              )
+                            ) : (
+                              <span className="ul-land-comparison-text-value">
+                                {value ?? '-'}
+                              </span>
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  </Fragment>
+                );
+              })}
             </tbody>
           </table>
         </div>

@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
+import type { PublicLayoutConfig } from '../../layouts/types/layout';
 
 export interface LandingAction {
   to: string;
@@ -249,6 +250,8 @@ export interface LandingBentoItem {
   colSpan?: 1 | 2 | 3;
   visual?: ReactNode;
   action?: LandingAction;
+  tags?: readonly string[];
+  children?: ReactNode;
 }
 
 export interface LandingBentoGridProps {
@@ -261,6 +264,7 @@ export interface LandingBentoGridProps {
   columns?: 2 | 3 | 4;
   alt?: boolean;
   className?: string;
+  children?: ReactNode;
 }
 
 export interface LandingComparisonTier {
@@ -273,9 +277,10 @@ export interface LandingComparisonTier {
 
 export interface LandingComparisonRow {
   category?: string;
+  isCategoryHeader?: boolean;
   name: string;
   description?: string;
-  values: Record<string, boolean | string>;
+  values?: Record<string, boolean | string>;
 }
 
 export interface LandingComparisonProps {
@@ -302,21 +307,29 @@ export interface LandingAnnouncementBarProps {
 
 export interface TurnkeyLandingPageConfig {
   hero: LandingHeroProps;
+  announcementBar?: LandingAnnouncementBarProps;
+  chips?: LandingChipsProps;
   logoCloud?: LandingLogoCloudProps;
   stats?: LandingStatsProps;
   section?: LandingSectionProps;
+  sections?: readonly LandingSectionProps[];
   bento?: LandingBentoGridProps;
+  bentos?: readonly LandingBentoGridProps[];
   steps?: LandingStepsProps;
   comparison?: LandingComparisonProps;
+  comparisons?: readonly LandingComparisonProps[];
   testimonials?: LandingTestimonialsProps;
   pricing?: LandingPricingProps;
   faq?: LandingFaqProps;
   changelog?: LandingChangelogProps;
   contact?: LandingContactProps;
   cta?: LandingCtaProps;
+  layout?: PublicLayoutConfig;
 }
 
 export interface TurnkeyLandingPageProps {
   config: TurnkeyLandingPageConfig;
+  layout?: PublicLayoutConfig;
   className?: string;
+  children?: ReactNode;
 }

@@ -13,6 +13,7 @@ export function LandingBentoGrid({
   columns = 3,
   alt = false,
   className,
+  children,
 }: LandingBentoGridProps) {
   const rootClasses = [
     'ul-land-section',
@@ -64,9 +65,21 @@ export function LandingBentoGrid({
                   <p className="ul-land-bento-card-desc">{item.description}</p>
                 </div>
 
+                {item.tags && item.tags.length > 0 ? (
+                  <div className="ul-land-bento-tags">
+                    {item.tags.map((tag) => (
+                      <span key={tag} className="ul-land-bento-tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+
                 {item.visual ? (
                   <div className="ul-land-bento-card-visual">{item.visual}</div>
                 ) : null}
+
+                {item.children}
 
                 {item.action ? (
                   <Link to={item.action.to} className="ul-land-bento-action">
@@ -78,6 +91,7 @@ export function LandingBentoGrid({
             );
           })}
         </div>
+        {children}
       </div>
     </section>
   );

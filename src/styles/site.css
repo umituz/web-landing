@@ -1691,6 +1691,22 @@
   text-decoration: underline;
 }
 
+.ul-land-bento-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ul-space-1, 0.25rem);
+  margin-top: var(--ul-space-3, 0.75rem);
+}
+
+.ul-land-bento-tag {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--ul-radius-full, 9999px);
+  background: color-mix(in srgb, var(--color-primary, #33406b) 8%, transparent);
+  color: var(--color-primary, #33406b);
+  font-weight: 500;
+}
+
 .ul-land-comparison-wrapper {
   margin-top: var(--ul-space-8, 2rem);
   overflow-x: auto;
@@ -1778,6 +1794,21 @@
 .ul-land-comparison-text-value {
   font-size: 0.875rem;
   font-weight: 500;
+  color: var(--color-ink, #23252b);
+}
+
+.ul-land-comparison-category-row td {
+  background: color-mix(in srgb, var(--color-ink, #23252b) 4%, transparent);
+  padding: var(--ul-space-3, 0.75rem) var(--ul-space-6, 1.5rem);
+  border-top: 1px solid var(--color-border, rgba(128, 128, 128, 0.2));
+  border-bottom: 1px solid var(--color-border, rgba(128, 128, 128, 0.2));
+}
+
+.ul-land-comparison-category-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--color-ink, #23252b);
 }
 

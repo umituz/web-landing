@@ -180,6 +180,53 @@ describe('TurnkeyLandingPage', () => {
     expect(screen.getByText('99.9%')).toBeTruthy();
     expect(screen.getByText('Start building today')).toBeTruthy();
   });
+
+  it('renders turnkey landing with announcementBar, chips, bentos, comparisons, layout and children', () => {
+    renderKit(
+      <TurnkeyLandingPage
+        config={{
+          announcementBar: {
+            text: 'Special launch discount',
+            action: { to: '/offer', label: 'Claim' },
+          },
+          hero: {
+            title: 'Turnkey Suite',
+            lead: 'Enterprise solutions in one box.',
+          },
+          chips: {
+            items: ['TypeScript', 'React', 'Tailwind'],
+          },
+          bentos: [
+            {
+              title: 'Multi-Bento',
+              items: [{ id: 'b1', title: 'Feature One', description: 'Description one' }],
+            },
+          ],
+          comparisons: [
+            {
+              title: 'Tier Comparison',
+              tiers: [{ id: 'basic', name: 'Basic' }],
+              rows: [{ name: 'Feature A', values: { basic: true } }],
+            },
+          ],
+        }}
+        layout={{
+          navItems: [{ to: '/docs', label: 'Docs' }],
+          footerColumns: [{ heading: 'Product', links: [{ to: '/features', label: 'Features' }] }],
+        }}
+      >
+        <div data-testid="custom-child-block">Custom Extension Block</div>
+      </TurnkeyLandingPage>
+    );
+
+    expect(screen.getByText('Special launch discount')).toBeTruthy();
+    expect(screen.getByText('Turnkey Suite')).toBeTruthy();
+    expect(screen.getByText('TypeScript')).toBeTruthy();
+    expect(screen.getByText('Multi-Bento')).toBeTruthy();
+    expect(screen.getByText('Tier Comparison')).toBeTruthy();
+    expect(screen.getAllByText('Docs').length).toBeGreaterThan(0);
+    expect(screen.getByTestId('custom-child-block')).toBeTruthy();
+  });
 });
 
 describe('LandingBentoGrid', () => {
@@ -221,6 +268,33 @@ describe('LandingBentoGrid', () => {
     expect(screen.getByText('Edge Acceleration')).toBeTruthy();
     expect(screen.getByText('Learn more')).toBeTruthy();
   });
+
+  it('renders bento cards with tags and children', () => {
+    const items = [
+      {
+        id: 'tagged-card',
+        title: 'Tagged Card',
+        description: 'Card with tags',
+        tags: ['v2.2.0', 'Pro'],
+        children: <div data-testid="bento-inner-child">Inner Child</div>,
+      },
+    ];
+
+    renderKit(
+      <LandingBentoGrid
+        title="Bento with tags"
+        items={items}
+      >
+        <div data-testid="bento-outer-child">Outer Footer Child</div>
+      </LandingBentoGrid>
+    );
+
+    expect(screen.getByText('Tagged Card')).toBeTruthy();
+    expect(screen.getByText('v2.2.0')).toBeTruthy();
+    expect(screen.getByText('Pro')).toBeTruthy();
+    expect(screen.getByTestId('bento-inner-child')).toBeTruthy();
+    expect(screen.getByTestId('bento-outer-child')).toBeTruthy();
+  });
 });
 
 describe('LandingComparison', () => {
@@ -260,6 +334,42 @@ describe('LandingComparison', () => {
     expect(screen.getByText('Connect your own domain name')).toBeTruthy();
     expect(screen.getByText('10,000')).toBeTruthy();
     expect(screen.getByText('Unlimited')).toBeTruthy();
+  });
+
+  it('renders category rows in comparison table', () => {
+    const tiers = [
+      { id: 'free', name: 'Free' },
+      { id: 'enterprise', name: 'Enterprise' },
+    ];
+    const rows = [
+      {
+        category: 'Security',
+        name: 'SSO',
+        values: { free: false, enterprise: true },
+      },
+      {
+        isCategoryHeader: true,
+        name: 'Compliance Section',
+      },
+      {
+        name: 'HIPAA',
+        values: { free: false, enterprise: true },
+      },
+    ];
+
+    renderKit(
+      <LandingComparison
+        title="Security & Compliance Matrix"
+        tiers={tiers}
+        rows={rows}
+      />
+    );
+
+    expect(screen.getByText('Security & Compliance Matrix')).toBeTruthy();
+    expect(screen.getByText('Security')).toBeTruthy();
+    expect(screen.getByText('Compliance Section')).toBeTruthy();
+    expect(screen.getByText('SSO')).toBeTruthy();
+    expect(screen.getByText('HIPAA')).toBeTruthy();
   });
 });
 
