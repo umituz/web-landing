@@ -1,12 +1,15 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router';
-import { Mail, Sparkles } from 'lucide-react';
+import { Mail, Sparkles, Shield, Zap } from 'lucide-react';
 import { LandingPageScaffold } from './LandingPageScaffold';
 import { LandingStats } from './LandingStats';
 import { LandingLogoCloud } from './LandingLogoCloud';
 import { LandingContact } from './LandingContact';
 import { LandingChangelog } from './LandingChangelog';
+import { LandingBentoGrid } from './LandingBentoGrid';
+import { LandingComparison } from './LandingComparison';
+import { LandingAnnouncementBar } from './LandingAnnouncementBar';
 import { TurnkeyLandingPage } from './TurnkeyLandingPage';
 
 function renderKit(ui: React.ReactElement) {
@@ -178,3 +181,109 @@ describe('TurnkeyLandingPage', () => {
     expect(screen.getByText('Start building today')).toBeTruthy();
   });
 });
+
+describe('LandingBentoGrid', () => {
+  it('renders bento grid cards with badges, icons, and actions', () => {
+    const items = [
+      {
+        id: 'security',
+        title: 'Enterprise Encryption',
+        description: 'End-to-end data encryption across all endpoints.',
+        icon: Shield,
+        badge: 'SOC2',
+        colSpan: 2 as const,
+        action: { to: '/security', label: 'Learn more' },
+      },
+      {
+        id: 'speed',
+        title: 'Edge Acceleration',
+        description: 'Sub-50ms latency across 300+ edge points.',
+        icon: Zap,
+      },
+    ];
+
+    renderKit(
+      <LandingBentoGrid
+        kicker="Architecture"
+        title="Engineered for performance"
+        titleEm="at global scale"
+        intro="Discover modular primitives that scale with your workload."
+        items={items}
+        columns={3}
+      />
+    );
+
+    expect(screen.getByText('Architecture')).toBeTruthy();
+    expect(screen.getByText(/Engineered for performance/)).toBeTruthy();
+    expect(screen.getByText('at global scale')).toBeTruthy();
+    expect(screen.getByText('Enterprise Encryption')).toBeTruthy();
+    expect(screen.getByText('SOC2')).toBeTruthy();
+    expect(screen.getByText('Edge Acceleration')).toBeTruthy();
+    expect(screen.getByText('Learn more')).toBeTruthy();
+  });
+});
+
+describe('LandingComparison', () => {
+  it('renders comparison matrix with tiers, booleans, and values', () => {
+    const tiers = [
+      { id: 'starter', name: 'Starter' },
+      { id: 'pro', name: 'Pro', badge: 'Popular', highlight: true, action: { to: '/pro', label: 'Choose Pro' } },
+    ];
+    const rows = [
+      {
+        name: 'Custom Domain',
+        description: 'Connect your own domain name',
+        values: { starter: false, pro: true },
+      },
+      {
+        name: 'Monthly API Calls',
+        values: { starter: '10,000', pro: 'Unlimited' },
+      },
+    ];
+
+    renderKit(
+      <LandingComparison
+        kicker="Plans"
+        title="Compare Feature Matrix"
+        tiers={tiers}
+        rows={rows}
+      />
+    );
+
+    expect(screen.getByText('Plans')).toBeTruthy();
+    expect(screen.getByText('Compare Feature Matrix')).toBeTruthy();
+    expect(screen.getByText('Starter')).toBeTruthy();
+    expect(screen.getByText('Pro')).toBeTruthy();
+    expect(screen.getByText('Popular')).toBeTruthy();
+    expect(screen.getByText('Choose Pro')).toBeTruthy();
+    expect(screen.getByText('Custom Domain')).toBeTruthy();
+    expect(screen.getByText('Connect your own domain name')).toBeTruthy();
+    expect(screen.getByText('10,000')).toBeTruthy();
+    expect(screen.getByText('Unlimited')).toBeTruthy();
+  });
+});
+
+describe('LandingAnnouncementBar', () => {
+  it('renders announcement bar and handles dismissal', () => {
+    const handleDismiss = vi.fn();
+    renderKit(
+      <LandingAnnouncementBar
+        badge="New"
+        text="Version 2.0 is now live!"
+        action={{ to: '/changelog', label: 'See changes' }}
+        onDismiss={handleDismiss}
+      />
+    );
+
+    expect(screen.getByText('New')).toBeTruthy();
+    expect(screen.getByText('Version 2.0 is now live!')).toBeTruthy();
+    expect(screen.getByText('See changes')).toBeTruthy();
+
+    const closeBtn = screen.getByLabelText('Dismiss announcement');
+    fireEvent.click(closeBtn);
+
+    expect(handleDismiss).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Version 2.0 is now live!')).toBeNull();
+  });
+});
+

@@ -240,15 +240,78 @@ export interface LandingChangelogProps {
   className?: string;
 }
 
+export interface LandingBentoItem {
+  id: string;
+  title: string;
+  description: string;
+  icon?: LucideIcon;
+  badge?: string;
+  colSpan?: 1 | 2 | 3;
+  visual?: ReactNode;
+  action?: LandingAction;
+}
+
+export interface LandingBentoGridProps {
+  id?: string;
+  kicker?: string;
+  title: string;
+  titleEm?: string;
+  intro?: string;
+  items: readonly LandingBentoItem[];
+  columns?: 2 | 3 | 4;
+  alt?: boolean;
+  className?: string;
+}
+
+export interface LandingComparisonTier {
+  id: string;
+  name: string;
+  badge?: string;
+  highlight?: boolean;
+  action?: LandingAction;
+}
+
+export interface LandingComparisonRow {
+  category?: string;
+  name: string;
+  description?: string;
+  values: Record<string, boolean | string>;
+}
+
+export interface LandingComparisonProps {
+  id?: string;
+  kicker?: string;
+  title: string;
+  titleEm?: string;
+  intro?: string;
+  tiers: readonly LandingComparisonTier[];
+  rows: readonly LandingComparisonRow[];
+  alt?: boolean;
+  className?: string;
+}
+
+export interface LandingAnnouncementBarProps {
+  id?: string;
+  badge?: string;
+  text: string;
+  action?: LandingAction;
+  dismissible?: boolean;
+  onDismiss?: () => void;
+  className?: string;
+}
+
 export interface TurnkeyLandingPageConfig {
   hero: LandingHeroProps;
   logoCloud?: LandingLogoCloudProps;
   stats?: LandingStatsProps;
   section?: LandingSectionProps;
+  bento?: LandingBentoGridProps;
   steps?: LandingStepsProps;
+  comparison?: LandingComparisonProps;
   testimonials?: LandingTestimonialsProps;
   pricing?: LandingPricingProps;
   faq?: LandingFaqProps;
+  changelog?: LandingChangelogProps;
   contact?: LandingContactProps;
   cta?: LandingCtaProps;
 }

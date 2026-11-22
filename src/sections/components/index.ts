@@ -13,4 +13,7 @@ export { LandingStats } from './LandingStats';
 export { LandingLogoCloud } from './LandingLogoCloud';
 export { LandingContact } from './LandingContact';
 export { LandingChangelog } from './LandingChangelog';
+export { LandingBentoGrid } from './LandingBentoGrid';
+export { LandingComparison } from './LandingComparison';
+export { LandingAnnouncementBar } from './LandingAnnouncementBar';
 export { TurnkeyLandingPage } from './TurnkeyLandingPage';
