@@ -10,6 +10,7 @@ export function LandingComparison({
   title,
   titleEm,
   intro,
+  featureLabel = 'Feature',
   tiers,
   rows,
   alt = false,
@@ -37,7 +38,7 @@ export function LandingComparison({
           <table className="ul-land-comparison-table">
             <thead>
               <tr>
-                <th className="ul-land-comparison-feature-col">Feature</th>
+                <th className="ul-land-comparison-feature-col">{featureLabel}</th>
                 {tiers.map((tier) => (
                   <th
                     key={tier.id}

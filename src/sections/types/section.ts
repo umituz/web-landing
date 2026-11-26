@@ -289,6 +289,7 @@ export interface LandingComparisonProps {
   title: string;
   titleEm?: string;
   intro?: string;
+  featureLabel?: string;
   tiers: readonly LandingComparisonTier[];
   rows: readonly LandingComparisonRow[];
   alt?: boolean;

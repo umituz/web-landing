@@ -326,6 +326,7 @@ describe('LandingComparison', () => {
 
     expect(screen.getByText('Plans')).toBeTruthy();
     expect(screen.getByText('Compare Feature Matrix')).toBeTruthy();
+    expect(screen.getByText('Feature')).toBeTruthy();
     expect(screen.getByText('Starter')).toBeTruthy();
     expect(screen.getByText('Pro')).toBeTruthy();
     expect(screen.getByText('Popular')).toBeTruthy();
@@ -334,6 +335,19 @@ describe('LandingComparison', () => {
     expect(screen.getByText('Connect your own domain name')).toBeTruthy();
     expect(screen.getByText('10,000')).toBeTruthy();
     expect(screen.getByText('Unlimited')).toBeTruthy();
+  });
+
+  it('renders a localized feature column header when featureLabel is provided', () => {
+    renderKit(
+      <LandingComparison
+        title="Compare Feature Matrix"
+        featureLabel="Özellik"
+        tiers={[{ id: 'free', name: 'Free' }]}
+        rows={[{ name: 'Custom Domain', values: { free: true } }]}
+      />,
+    );
+    expect(screen.getByText('Özellik')).toBeTruthy();
+    expect(screen.queryByText('Feature')).toBeNull();
   });
 
   it('renders category rows in comparison table', () => {

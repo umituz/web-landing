@@ -1,6 +1,6 @@
 {
   "name": "@umituz/web-landing",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Public marketing-site shell for the fleet — PublicSiteLayout (header nav, CTA pair, footer columns, skip link, scroll restore); ul-* stylesheet on design-system tokens. The public twin of @umituz/web-dashboard.",
   "type": "module",
   "main": "./src/index.ts",
@@ -42,6 +42,8 @@
     "lucide-react": "^1.69.0"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
     "@types/node": "^22.20.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -49,12 +51,10 @@
     "@typescript-eslint/parser": "^8.57.2",
     "@umituz/web-design-system": "^5.3.1",
     "eslint": "^10.0.2",
+    "jsdom": "^29.1.1",
     "react-router": "^7.18.4",
     "typescript": "^5.9.3",
-    "vitest": "^5.0.1",
-    "@testing-library/dom": "^10.4.2",
-    "@testing-library/react": "^16.3.3",
-    "jsdom": "^29.1.1"
+    "vitest": "^5.0.1"
   },
   "keywords": [
     "landing",
