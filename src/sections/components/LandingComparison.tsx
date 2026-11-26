@@ -11,6 +11,8 @@ export function LandingComparison({
   titleEm,
   intro,
   featureLabel = 'Feature',
+  includedLabel = 'Included',
+  notIncludedLabel = 'Not included',
   tiers,
   rows,
   alt = false,
@@ -115,13 +117,13 @@ export function LandingComparison({
                                 <Check
                                   size={18}
                                   className="ul-land-comparison-check"
-                                  aria-label="Included"
+                                  aria-label={includedLabel}
                                 />
                               ) : (
                                 <X
                                   size={18}
                                   className="ul-land-comparison-cross"
-                                  aria-label="Not included"
+                                  aria-label={notIncludedLabel}
                                 />
                               )
                             ) : (

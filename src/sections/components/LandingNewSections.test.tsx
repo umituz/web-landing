@@ -350,6 +350,25 @@ describe('LandingComparison', () => {
     expect(screen.queryByText('Feature')).toBeNull();
   });
 
+  it('renders localized value cell labels when includedLabel and notIncludedLabel are provided', () => {
+    renderKit(
+      <LandingComparison
+        title="Compare Feature Matrix"
+        includedLabel="Dahil"
+        notIncludedLabel="Dahil değil"
+        tiers={[{ id: 'free', name: 'Free' }]}
+        rows={[
+          { name: 'Custom Domain', values: { free: true } },
+          { name: 'Priority Support', values: { free: false } },
+        ]}
+      />,
+    );
+    expect(screen.getByLabelText('Dahil')).toBeTruthy();
+    expect(screen.getByLabelText('Dahil değil')).toBeTruthy();
+    expect(screen.queryByLabelText('Included')).toBeNull();
+    expect(screen.queryByLabelText('Not included')).toBeNull();
+  });
+
   it('renders category rows in comparison table', () => {
     const tiers = [
       { id: 'free', name: 'Free' },
@@ -408,6 +427,20 @@ describe('LandingAnnouncementBar', () => {
 
     expect(handleDismiss).toHaveBeenCalledTimes(1);
     expect(screen.queryByText('Version 2.0 is now live!')).toBeNull();
+  });
+
+  it('renders localized region and dismiss labels when provided', () => {
+    renderKit(
+      <LandingAnnouncementBar
+        text="Kampanya başladı"
+        regionLabel="Duyuru"
+        dismissLabel="Duyuruyu kapat"
+      />,
+    );
+
+    expect(screen.getByRole('status', { name: 'Duyuru' })).toBeTruthy();
+    expect(screen.getByLabelText('Duyuruyu kapat')).toBeTruthy();
+    expect(screen.queryByLabelText('Dismiss announcement')).toBeNull();
   });
 });
 

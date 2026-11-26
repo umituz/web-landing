@@ -11,6 +11,8 @@ export function LandingAnnouncementBar({
   action,
   dismissible = true,
   onDismiss,
+  regionLabel = 'Announcement',
+  dismissLabel = 'Dismiss announcement',
   className,
 }: LandingAnnouncementBarProps) {
   const [visible, setVisible] = useState(true);
@@ -25,7 +27,7 @@ export function LandingAnnouncementBar({
   const rootClasses = ['ul-land-announcement', className ?? ''].filter(Boolean).join(' ');
 
   return (
-    <aside id={id} className={rootClasses} role="status" aria-label="Announcement">
+    <aside id={id} className={rootClasses} role="status" aria-label={regionLabel}>
       <div className="ul-land-announcement-inner">
         <div className="ul-land-announcement-content">
           {badge ? (
@@ -47,7 +49,7 @@ export function LandingAnnouncementBar({
             type="button"
             className="ul-land-announcement-close"
             onClick={handleDismiss}
-            aria-label="Dismiss announcement"
+            aria-label={dismissLabel}
           >
             <X size={16} aria-hidden="true" />
           </button>

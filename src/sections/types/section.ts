@@ -290,6 +290,8 @@ export interface LandingComparisonProps {
   titleEm?: string;
   intro?: string;
   featureLabel?: string;
+  includedLabel?: string;
+  notIncludedLabel?: string;
   tiers: readonly LandingComparisonTier[];
   rows: readonly LandingComparisonRow[];
   alt?: boolean;
@@ -303,6 +305,8 @@ export interface LandingAnnouncementBarProps {
   action?: LandingAction;
   dismissible?: boolean;
   onDismiss?: () => void;
+  regionLabel?: string;
+  dismissLabel?: string;
   className?: string;
 }
 
