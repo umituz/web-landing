@@ -310,8 +310,26 @@ export interface LandingAnnouncementBarProps {
   className?: string;
 }
 
+export type LandingBlock =
+  | ({ kind: 'announcementBar' } & LandingAnnouncementBarProps)
+  | ({ kind: 'hero' } & LandingHeroProps)
+  | ({ kind: 'chips' } & LandingChipsProps)
+  | ({ kind: 'logoCloud' } & LandingLogoCloudProps)
+  | ({ kind: 'stats' } & LandingStatsProps)
+  | ({ kind: 'section' } & LandingSectionProps)
+  | ({ kind: 'bento' } & LandingBentoGridProps)
+  | ({ kind: 'steps' } & LandingStepsProps)
+  | ({ kind: 'comparison' } & LandingComparisonProps)
+  | ({ kind: 'testimonials' } & LandingTestimonialsProps)
+  | ({ kind: 'pricing' } & LandingPricingProps)
+  | ({ kind: 'faq' } & LandingFaqProps)
+  | ({ kind: 'changelog' } & LandingChangelogProps)
+  | ({ kind: 'contact' } & LandingContactProps)
+  | ({ kind: 'cta' } & LandingCtaProps)
+  | { kind: 'custom'; id?: string; className?: string; children: ReactNode };
+
 export interface TurnkeyLandingPageConfig {
-  hero: LandingHeroProps;
+  hero?: LandingHeroProps;
   announcementBar?: LandingAnnouncementBarProps;
   chips?: LandingChipsProps;
   logoCloud?: LandingLogoCloudProps;
@@ -329,6 +347,7 @@ export interface TurnkeyLandingPageConfig {
   changelog?: LandingChangelogProps;
   contact?: LandingContactProps;
   cta?: LandingCtaProps;
+  blocks?: readonly LandingBlock[];
   layout?: PublicLayoutConfig;
 }
 

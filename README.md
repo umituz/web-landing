@@ -154,3 +154,40 @@ import {
 - `LandingCta` — closing panel with `titleEm` accent and primary action.
 - `LandingContainer` — the `.ul-land` wrapper; drop it inside
   `PublicSiteLayout`.
+
+## Turnkey page engine — ordered `blocks` (2.5.0)
+
+`TurnkeyLandingPage` renders a whole landing from one config object. The
+original fixed-slot mode (hero → chips → … → cta) still works, but it pins
+the section order. Real pages interleave — a platform bento before the
+feature sections, a plain statement band between them — so 2.5.0 adds an
+ordered `blocks` array: every section kind is a block, rendered exactly in
+array order. When `blocks` is present the fixed slots are ignored and
+`hero` is optional (declare it as a block).
+
+```tsx
+import { TurnkeyLandingPage } from '@umituz/web-landing/sections';
+
+<TurnkeyLandingPage
+  config={{
+    layout,
+    blocks: [
+      { kind: 'hero', title: 'Run the farm ', titleEm: 'end to end', lead: '…', primary: { to: '/app', label: 'Open' } },
+      { kind: 'chips', items: ['Fields', 'Livestock'], label: 'Modules' },
+      { kind: 'bento', id: 'platform', title: 'Platform', items: [{ id: 'crops', title: 'Crops', description: '…', colSpan: 2 }] },
+      { kind: 'section', id: 'fields', title: 'Fields', cards: [{ title: 'Soil tests', body: '…' }], alt: true },
+      { kind: 'steps', title: 'How it works', steps: [{ title: 'Plan', body: 'Set the season.' }] },
+      { kind: 'cta', title: 'Bring it ', titleEm: 'together', body: '…', primary: { to: '/app', label: 'Get started' } },
+      { kind: 'custom', id: 'host-band', className: 'host-band', children: <HostBand /> },
+    ],
+  }}
+/>
+```
+
+Block kinds mirror the section kit one-to-one (`announcementBar`, `hero`,
+`chips`, `logoCloud`, `stats`, `section`, `bento`, `steps`, `comparison`,
+`testimonials`, `pricing`, `faq`, `changelog`, `contact`, `cta`) plus
+`custom` for anything host-specific. `layout` (or the `layout` prop) wraps
+the page in `PublicSiteLayout`; omit it to host the page yourself. The host
+app keeps only one file: a hook that builds this config from its i18n
+strings and icons.

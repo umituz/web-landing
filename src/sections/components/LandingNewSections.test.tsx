@@ -227,6 +227,71 @@ describe('TurnkeyLandingPage', () => {
     expect(screen.getAllByText('Docs').length).toBeGreaterThan(0);
     expect(screen.getByTestId('custom-child-block')).toBeTruthy();
   });
+
+  it('renders blocks in declared order — bento before sections, hero supplied by blocks', () => {
+    renderKit(
+      <TurnkeyLandingPage
+        config={{
+          blocks: [
+            { kind: 'hero', title: 'Blocks Hero', lead: 'Order is mine.' },
+            { kind: 'chips', items: ['Soil', 'Herd'] },
+            {
+              kind: 'bento',
+              id: 'platform',
+              title: 'Platform Bento',
+              items: [{ id: 'b1', title: 'Bento Cell', description: 'Comes third.' }],
+            },
+            {
+              kind: 'section',
+              id: 'fields',
+              title: 'Fields Section',
+              cards: [{ title: 'Soil tests', body: 'Lab results per field.' }],
+              alt: true,
+            },
+            {
+              kind: 'steps',
+              title: 'How it works',
+              steps: [{ title: 'Open', body: 'No sign-in.' }],
+            },
+            { kind: 'cta', title: 'Close', body: 'Done.', primary: { to: '/app', label: 'Open app' } },
+          ],
+        }}
+      />
+    );
+
+    const bento = screen.getByText('Platform Bento');
+    const section = screen.getByText('Fields Section');
+    const hero = screen.getByText('Blocks Hero');
+    expect(hero.compareDocumentPosition(bento) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(bento.compareDocumentPosition(section) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.getByText('Soil')).toBeTruthy();
+    expect(screen.getByText('Bento Cell')).toBeTruthy();
+    expect(screen.getByText('Close')).toBeTruthy();
+  });
+
+  it('renders custom blocks inline with section blocks', () => {
+    renderKit(
+      <TurnkeyLandingPage
+        config={{
+          blocks: [
+            { kind: 'hero', title: 'Custom Host', lead: 'Custom block next.' },
+            {
+              kind: 'custom',
+              id: 'host-band',
+              className: 'host-band',
+              children: <p data-testid="host-copy">Anything the host wants</p>,
+            },
+          ],
+        }}
+      />
+    );
+
+    const hero = screen.getByText('Custom Host');
+    const custom = screen.getByTestId('host-copy');
+    expect(hero.compareDocumentPosition(custom) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(custom.textContent).toBe('Anything the host wants');
+    expect(custom.parentElement?.id).toBe('host-band');
+  });
 });
 
 describe('LandingBentoGrid', () => {
