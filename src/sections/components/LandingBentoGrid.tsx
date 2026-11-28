@@ -45,6 +45,8 @@ export function LandingBentoGrid({
             return (
               <div
                 key={item.id}
+                id={item.id}
+                style={{ scrollMarginTop: '5rem' }}
                 className={`ul-land-bento-card ${spanClass}`.trim()}
               >
                 <div className="ul-land-bento-card-header">
